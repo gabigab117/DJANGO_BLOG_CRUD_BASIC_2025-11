@@ -1,82 +1,51 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Mon site web</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information réseau</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-<h1>BLOG DU JOUR</h1>
-<p>Bonjour mon template est créé, je m'appelle {{ prenom }}. Aujourd'hui, nous sommes le
-    <strong> {{ date }} </strong>
-</p>
-<p>le nom de ma machine est {{ hostname }}</p>
-<p>l'adresse ip en local de ma machine
-    <strong>{{ ip_locale }}</strong>
-</p>
-<head>
-    <title>Informations IP</title>
-    {% if ip_info.error %}
-        <div style="color: red; padding: 10px; background: #ffe6e6; border-radius: 5px;">
-        ⚠️ {{ ip_info.error }}
+    <div class="home-container">
+        <div class="home-header">
+            <h1>BLOG DU JOUR</h1>
+        </div>
+
+        <div class="home-intro">
+            <p>Bonjour, c'est ma page d'accueil est créé, je m'appelle {{ prenom }}.</p>
+            <p>Aujourd'hui, nous sommes le <strong>{{ date }}</strong></p>
+            <p>Le nom de ma machine est <strong>{{ hostname }}</strong></p>
+            <p>L'adresse IP en local de ma machine <strong>{{ ip_local }}</strong></p>
+        </div>
+
+        <div class="content-grid">
+            <div class="info-section">
+                <h2>Informations IP Publique</h2>
+                <ul>
+                    <li><strong>IP Publique :</strong> {{ ip_info.query }}</li>
+                    <li><strong>FAI :</strong> {{ ip_info.isp }}</li>
+                    <li><strong>Organisation :</strong> {{ ip_info.org }}</li>
+                    <li><strong>AS :</strong> {{ ip_info.as }}</li>
+                    <li><strong>Pays :</strong> {{ ip_info.country }}</li>
+                    <li><strong>Code pays :</strong> {{ ip_info.countryCode }}</li>
+                    <li><strong>Région :</strong> {{ ip_info.region }}</li>
+                    <li><strong>Ville :</strong> {{ ip_info.city }}</li>
+                    <li><strong>Code postal :</strong> {{ ip_info.zip }}</li>
+                    <li><strong>Latitude :</strong> {{ ip_info.lat }}</li>
+                    <li><strong>Longitude :</strong> {{ ip_info.lon }}</li>
+                    <li><strong>Fuseau horaire :</strong> {{ ip_info.timezone }}</li>
+                </ul>
+            </div>
+
+            <div class="map-section">
+                <h2>Localisation sur la carte</h2>
+                <div class="map-container">
+                    {{ map_html|safe }}
+                </div>
+            </div>
+        </div>
     </div>
-    {% else %}
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
-    <style>
-        #map {
-            height: 400px;
-            width: 500%;
-            margin: 20px 0;
-        }
-    </style>
-    {% endif %}
-</head>
-
-<h2>Informations IP Publique</h2>
-    <ul>
-        <li><strong>IP Publique :</strong> {{ ip_info.query }}</li>
-        <li><strong>Pays :</strong> {{ ip_info.country }}</li>
-        <li><strong>Code pays :</strong> {{ ip_info.countryCode }}</li>
-        <li><strong>Région :</strong> {{ ip_info.regionName }}</li>
-        <li><strong>Ville :</strong> {{ ip_info.city }}</li>
-        <li><strong>Code postal :</strong> {{ ip_info.zip }}</li>
-        <li><strong>Latitude :</strong> {{ ip_info.lat }}</li>
-        <li><strong>Longitude :</strong> {{ ip_info.lon }}</li>
-        <li><strong>Fuseau horaire :</strong> {{ ip_info.timezone }}</li>
-        <li><strong>FAI :</strong> {{ ip_info.isp }}</li>
-        <li><strong>Organisation :</strong> {{ ip_info.org }}</li>
-        <li><strong>AS :</strong> {{ ip_info.as }}</li>
-    </ul>
-
-    <h2>Localisation sur la carte</h2>
-    <div id="map" ></div>
-
-    <!-- Leaflet JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
-    <script>
-        // Coordonnées depuis Django
-        var lat = {{ ip_info.lat }};
-        var lon = {{ ip_info.lon }};
-        var city = "{{ ip_info.city }}";
-        var country = "{{ ip_info.country }}";
-
-        // Initialiser la carte
-        var map = L.map('map').setView([lat, lon], 13);
-
-        // Ajouter le fond de carte OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-        // Ajouter un marqueur
-        L.marker([lat, lon]).addTo(map)
-            .bindPopup('<b>' + city + ', ' + country + '</b><br>IP: {{ ip_info.query }}')
-            .openPopup();
-    </script>
-
-<ul>
-        <li><strong>IP client:</strong> {{ client_ip }}</li>
- </ul>
-
 </body>
 </html>
