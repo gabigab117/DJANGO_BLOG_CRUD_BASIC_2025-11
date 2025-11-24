@@ -14,10 +14,10 @@ class BlogHome(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        if self.request.user.is_authenticated:
+        if self.request.user.is_superuser:
             return queryset
 
-        return queryset.filter(published=True)
+        return queryset.filter(published_on=True)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -30,7 +30,7 @@ class BlogPostCreate(CreateView):
 class BlogPostUpdate(UpdateView):
     model = Blogpost
     template_name = "blog/blogpost_edit.html"
-    fields = ['title', 'content', 'published', ]
+    fields = ['title', 'content', 'published_on', ]
 
 
 class BlogPostDetail(DetailView):

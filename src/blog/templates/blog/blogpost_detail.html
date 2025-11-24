@@ -7,7 +7,9 @@
 {% block content %}
     <article class="post-detail">
         <h1>{{ post.title }}</h1>
+        {% if post.thumbnail %}
         <img src="{{ post.thumbnail.url }}" alt="L'image de l'article">
+        {% endif %}
         <div>{{ post.content|safe }}</div>
     </article>
 {% endblock %}
